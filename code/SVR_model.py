@@ -50,7 +50,7 @@ def SVR_model(X_train, X_test, y_train, y_test):
     plt.ylabel('Predicted Values (y_pred_test)', fontsize=14)
     plt.grid(True)
 
-    plt.savefig('Submission/Plots/SVR.png', dpi=300, bbox_inches='tight')
+    plt.savefig('plots/SVR.png', dpi=300, bbox_inches='tight')
 
     print("SVR Model - End")
     return 0

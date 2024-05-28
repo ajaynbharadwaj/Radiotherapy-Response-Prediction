@@ -89,7 +89,7 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     plt.legend()
     plt.title('ROC curve Random Forest')
     plt.tight_layout()
-    plt.savefig("Submission/Plots/RF_ROC.png")
+    plt.savefig("plots/RF_ROC.png")
 
     print("RF Model - End")
     return 0

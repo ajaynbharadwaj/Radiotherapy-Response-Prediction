@@ -47,7 +47,7 @@ def PreProcessing(R_STATE, N_FEATURES, VAR_THRESHOLD, TEST_SIZE):
     plt.ylim(0, 15000)
 
     plt.tight_layout()
-    plt.savefig('Submission/Plots/variances_combined.png', dpi=300, bbox_inches='tight')
+    plt.savefig('plots/variances_combined.png', dpi=300, bbox_inches='tight')
 
     plt.figure(figsize=(9, 3))
     sns.boxplot(x=y_train)
@@ -56,7 +56,7 @@ def PreProcessing(R_STATE, N_FEATURES, VAR_THRESHOLD, TEST_SIZE):
     plt.axvline(y_train.mean(), color='r', linestyle='--', label=f'Mean: {y_train.mean():.2f}')
     plt.axvline(y_train.median(), color='g', linestyle='-', label=f'Median: {y_train.median():.2f}')
     plt.legend()
-    plt.savefig('Submission/Plots/SF2.png', dpi=300, bbox_inches='tight')
+    plt.savefig('plots/SF2.png', dpi=300, bbox_inches='tight')
 
     mutual_info_scores = mutual_info_regression(X_train_processed, y_train, random_state=R_STATE)
     feature_scores = pd.DataFrame({'Feature': X_train_processed.columns, 'Mutual_Info_Score': mutual_info_scores})
