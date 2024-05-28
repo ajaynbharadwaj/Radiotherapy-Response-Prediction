@@ -14,9 +14,9 @@ def main():
     TEST_SIZE = 0.2
 
     X_train, X_test, y_train, y_test = PreProcessing(R_STATE, N_FEATURES, VAR_THRESHOLD, TEST_SIZE)
-    SVR_model(X_train, X_test, y_train, y_test)
+    #SVR_model(X_train, X_test, y_train, y_test)
     RF_model(X_train, X_test, y_train, y_test, R_STATE)
-    LR_model(X_train, X_test, y_train, y_test)
+    #LR_model(X_train, X_test, y_train, y_test)
 
     return 0
 

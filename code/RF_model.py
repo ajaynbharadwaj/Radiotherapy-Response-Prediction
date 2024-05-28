@@ -28,7 +28,7 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     n_estimators = [50, 100, 200]
     max_features = ['sqrt', 1]
     max_depth = [2, 3, 4]
-    min_samples_split = [3, 5, 7]
+    min_samples_split = [5, 7, 10]
     min_samples_leaf = [2, 4, 6]
     bootstrap = [True, False]
     random_state = [R_STATE]
@@ -90,6 +90,22 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     plt.title('ROC curve Random Forest')
     plt.tight_layout()
     plt.savefig("plots/RF_ROC.png")
+
+    feature_names = (X_train.columns)
+    best_rf = rf_grid.best_estimator_
+    feature_importances = best_rf.feature_importances_
+
+    # Get the indices of the top 10 features
+    indices = np.argsort(feature_importances)[::-1][:10]
+
+    # Plot the feature importances
+    plt.figure(figsize=(12, 10))
+    plt.title("Top 10 Feature Importances")
+    plt.bar(range(len(indices)), feature_importances[indices], align="center")
+    plt.xticks(range(len(indices)), [feature_names[i] for i in indices], rotation = 20)
+    plt.xlabel('Feature')
+    plt.ylabel('Importance')
+    plt.savefig("plots/Top_10_features.png")
 
     print("RF Model - End")
     return 0
