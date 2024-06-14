@@ -1,3 +1,4 @@
+# import all used packages and functions
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -5,13 +6,13 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
-
+# define RF_model function
 def RF_model(X_train, X_test, y_train, y_test, R_STATE):
 
     print("-------------")
     print("Random Forest")
     print("-------------")
-
+    # binarize train and test data with median as separator
     y_train = y_train.apply(lambda x: 1 if x > y_train.median() else 0)
     y_test = y_test.apply(lambda x: 1 if x > y_train.median() else 0)
 
@@ -23,8 +24,7 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     print("Train accuracy w/out grid search:",rf_model.score(X_train,y_train))
     print("Test accuracy w/out grid search:",rf_model.score(X_test,y_test))
 
-    # Define parameters for grid search
-    #n_estimators = [int(x) for x in np.linspace(start=60, stop=120, num=10)]
+    # Define hyperparameters for grid search
     n_estimators = [50, 100, 200]
     max_features = ['sqrt', 1]
     max_depth = [2, 3, 4]
@@ -63,7 +63,7 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
         'Score': [accuracy, precision, recall, f1, auc(fp_rates,tp_rates)]
     }
 
-    # Creating DataFrame
+    # Results of the scores and values
     final_data = pd.DataFrame(score_data)
     print(final_data)
     print(f"Predicted Amount of 0: {pd.Series(y_pred).value_counts().get(0,0)} and 1: {pd.Series(y_pred).value_counts().get(1,0)}")
@@ -95,10 +95,10 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     best_rf = rf_grid.best_estimator_
     feature_importances = best_rf.feature_importances_
 
-    # Get the indices of the top 10 features
+    # Get the indices of the top 10 features - not used
     indices = np.argsort(feature_importances)[::-1][:10]
 
-    # Plot the feature importances
+    # Plot the feature importances - not used
     plt.figure(figsize=(12, 10))
     plt.title("Top 10 Feature Importances")
     plt.bar(range(len(indices)), feature_importances[indices], align="center")
