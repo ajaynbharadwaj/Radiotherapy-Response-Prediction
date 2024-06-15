@@ -1,17 +1,17 @@
-# import all used packages and functions
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
-# define RF_model function
+
 def RF_model(X_train, X_test, y_train, y_test, R_STATE):
 
     print("-------------")
     print("Random Forest")
     print("-------------")
+    
     # binarize train and test data with median as separator
     y_train = y_train.apply(lambda x: 1 if x > y_train.median() else 0)
     y_test = y_test.apply(lambda x: 1 if x > y_train.median() else 0)
@@ -33,13 +33,15 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     bootstrap = [True, False]
     random_state = [R_STATE]
 
-    param_grid = {'n_estimators': n_estimators,
-                  'max_features': max_features,
-                  'max_depth': max_depth,
-                  'min_samples_split': min_samples_split,
-                  'min_samples_leaf': min_samples_leaf,
-                  'bootstrap': bootstrap,
-                  'random_state': random_state}
+    param_grid = {
+        'n_estimators': n_estimators,
+        'max_features': max_features,
+        'max_depth': max_depth,
+        'min_samples_split': min_samples_split,
+        'min_samples_leaf': min_samples_leaf,
+        'bootstrap': bootstrap,
+        'random_state': random_state
+    }
 
     # Run a grid search to find optimal parameters
     rf_grid = GridSearchCV(estimator=rf_model, param_grid=param_grid, cv=5, verbose=1, n_jobs=-1)
@@ -64,8 +66,8 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     }
 
     # Results of the scores and values
-    final_data = pd.DataFrame(score_data)
-    print(final_data)
+    final_scores = pd.DataFrame(score_data)
+    print(final_scores)
     print(f"Predicted Amount of 0: {pd.Series(y_pred).value_counts().get(0,0)} and 1: {pd.Series(y_pred).value_counts().get(1,0)}")
     print(f"Actual Amount of 0: {pd.Series(y_test).value_counts().get(0,0)} and 1: {pd.Series(y_test).value_counts().get(1,0)}")
 
@@ -78,16 +80,17 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
         'ROC-AUC': [auc(fp_rates, tp_rates)]
     }
     rf_data_df = pd.DataFrame(rf_data)
-    rf_data_df.to_csv('RF_data.csv', index=False)
+    #rf_data_df.to_csv('RF_data.csv', index=False)
 
     # Create the ROC-AUC plot
-    plt.figure()
+    plt.figure(figsize=(8, 8))
     plt.plot(fp_rates, tp_rates, label='Classifier')
-    plt.xlabel('FPR')
-    plt.ylabel('TPR')
+    plt.xlabel('FPR', fontsize=14)
+    plt.ylabel('TPR', fontsize=14)
     plt.plot([0, 1], [0, 1], color="r", ls="--", label='random\nclassifier')
     plt.legend()
-    plt.title('ROC curve Random Forest')
+    plt.title('ROC curve Random Forest', fontsize=16)
+    plt.grid(True)
     plt.tight_layout()
     plt.savefig("plots/RF_ROC.png")
 
@@ -99,13 +102,14 @@ def RF_model(X_train, X_test, y_train, y_test, R_STATE):
     indices = np.argsort(feature_importances)[::-1][:10]
 
     # Plot the feature importances - not used
-    plt.figure(figsize=(12, 10))
-    plt.title("Top 10 Feature Importances")
+    plt.figure(figsize=(12, 6))
+    plt.title("Top 10 Feature Importances", fontsize=16)
     plt.bar(range(len(indices)), feature_importances[indices], align="center")
-    plt.xticks(range(len(indices)), [feature_names[i] for i in indices], rotation = 20)
-    plt.xlabel('Feature')
-    plt.ylabel('Importance')
-    plt.savefig("plots/Top_10_features.png")
+    plt.xticks(range(len(indices)), [feature_names[i] for i in indices], rotation = 45, fontsize=12)
+    plt.xlabel('Feature', fontsize=14)
+    plt.ylabel('Importance', fontsize=14)
+    plt.tight_layout()
+    plt.savefig("plots/RF_top10features.png")
 
     print("RF Model - End")
     return 0

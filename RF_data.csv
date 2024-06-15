@@ -1,2 +1,0 @@
-Best Parameters,Accuracy,Precision,Recall,F1 Score,ROC-AUC
-"{'bootstrap': False, 'max_depth': 4, 'max_features': 1, 'min_samples_leaf': 4, 'min_samples_split': 5, 'n_estimators': 200, 'random_state': 30052024}",0.6129032258064516,0.7719298245614035,0.6567164179104478,0.7096774193548386,0.605625717566016

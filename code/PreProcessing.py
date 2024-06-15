@@ -24,39 +24,41 @@ def PreProcessing(R_STATE, N_FEATURES, VAR_THRESHOLD, TEST_SIZE):
     X_test_processed = X_test[cols]
     print("Shape after variance filter: {}".format(X_train_processed.shape))
 
-    plt.figure(figsize=(12, 10))
+    # SF2 distribution plot
+    plt.figure(figsize=(9, 2))
+    sns.boxplot(x=y_train, color='dodgerblue')
+    plt.title("SF2 Distribution")
+    plt.xlabel('SF2 values in the train dataset')
+    plt.axvline(y_train.mean(), color='r', linestyle='--', label=f'Mean:    {y_train.mean():.2f}')
+    plt.axvline(y_train.median(), color='g', linestyle='-', label=f'Median: {y_train.median():.2f}')
+    plt.legend()
+    plt.savefig('plots/SF2.png', dpi=300, bbox_inches='tight')
+
+    # Variance Histogram
+    plt.figure(figsize=(12, 12))
     xmin = min(X_train.var().min(), X_train_processed.var().min())
     xmax = max(X_train.var().max(), X_train_processed.var().max())
 
     # First subplot: Variance before filter
-    plt.subplot(2, 1, 1)
-    sns.histplot(X_train.var(), kde=True, bins=20)
-    plt.title('Variance of Each Feature (before filter)')
+    plt.subplot(3, 1, 1)
+    sns.histplot(X_train.var(), kde=True, bins=40)
+    plt.title('Variance of each Feature (before filters)')
     plt.xlabel('Variance')
     plt.ylabel('Frequency')
     plt.xlim(xmin, xmax)
-    plt.ylim(0, 15000)
+    plt.ylim(0, 10000)
 
     # Second subplot: Variance after filter
-    plt.subplot(2, 1, 2)
-    sns.histplot(X_train_processed.var(), kde=True, bins=20, color='green')
-    plt.title('Variance of Each Feature (after filter)')
+    plt.subplot(3, 1, 2)
+    sns.histplot(X_train_processed.var(), kde=True, bins=40, color='green')
+    plt.title('Variance of each Feature (after variance filter)')
     plt.xlabel('Variance')
     plt.ylabel('Frequency')
     plt.xlim(xmin, xmax)
-    plt.ylim(0, 15000)
+    plt.ylim(0, 1500)
 
     plt.tight_layout()
     plt.savefig('plots/variances_combined.png', dpi=300, bbox_inches='tight')
-
-    plt.figure(figsize=(9, 3))
-    sns.boxplot(x=y_train)
-    plt.title("SF2 Distribution")
-    plt.xlabel('SF2 values in the train dataset')
-    plt.axvline(y_train.mean(), color='r', linestyle='--', label=f'Mean: {y_train.mean():.2f}')
-    plt.axvline(y_train.median(), color='g', linestyle='-', label=f'Median: {y_train.median():.2f}')
-    plt.legend()
-    plt.savefig('plots/SF2.png', dpi=300, bbox_inches='tight')
 
     mutual_info_scores = mutual_info_regression(X_train_processed, y_train, random_state=R_STATE)
     feature_scores = pd.DataFrame({'Feature': X_train_processed.columns, 'Mutual_Info_Score': mutual_info_scores})
@@ -68,6 +70,18 @@ def PreProcessing(R_STATE, N_FEATURES, VAR_THRESHOLD, TEST_SIZE):
     X_train_processed = X_train_processed[top_feature_names]
     X_test_processed = X_test_processed[top_feature_names]
     print("Shape after mutual info filter: {}".format(X_train_processed.shape))
+
+    # third subplot: Variance after filter and mutual info
+    plt.subplot(3, 1, 3)
+    sns.histplot(X_train_processed.var(), kde=True, bins=40, color='red')
+    plt.title('Variance of each Feature (after variance and mutual info filter)')
+    plt.xlabel('Variance')
+    plt.ylabel('Frequency')
+    plt.xlim(xmin, xmax)
+    plt.ylim(0, 125)
+
+    plt.tight_layout()
+    plt.savefig('plots/variances_combined.png', dpi=300, bbox_inches='tight')
 
     print("Final shapes: {}, {}".format(X_train_processed.shape, X_test_processed.shape))
 
