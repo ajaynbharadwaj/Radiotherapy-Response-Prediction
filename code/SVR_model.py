@@ -15,12 +15,13 @@ def SVR_model(X_train, X_test, y_train, y_test):
 
     param_grid = { 
         'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-        'C': [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4],
-        'gamma': [1e-2, 1e-3, 1e-4, 1e-5, 1e-6]
+        'gamma': ['scale', 'auto', 1e-2, 1e-3, 1e-4],
+        'epsilon': [1e-1, 1e-2, 1e-3],
+        'C': [0.1, 0.4, 0.7, 1, 5, 10, 50]
     }
 
     svr_model = SVR()
-    svr_grid = GridSearchCV(estimator=svr_model, param_grid=param_grid, cv=6, scoring='neg_mean_squared_error', n_jobs=-1, verbose=1)
+    svr_grid = GridSearchCV(estimator=svr_model, param_grid=param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1, verbose=1)
     svr_grid.fit(X_train, y_train)
 
     best_params = svr_grid.best_params_
